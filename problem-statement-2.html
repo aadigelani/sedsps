@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PS-02 | AgriPulse: Satellite Based Land Use Classification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#05060a;
+    --panel:#0e1221;
+    --border:rgba(255,122,24,0.25);
+    --orange:#ff7a18;
+    --orange-2:#ffa14a;
+    --cyan:#36e2ff;
+    --text:#e7ecf3;
+    --text-dim:#8a93a6;
+    --glow:rgba(255,122,24,0.5);
+    --grid:rgba(255,122,24,0.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(255,122,24,0.08), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(54,226,255,0.05), transparent 50%),
+      linear-gradient(180deg, #05060a 0%, #08091a 50%, #05060a 100%);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    line-height:1.6;
+    padding:2rem 1rem 4rem;
+    position:relative;
+    overflow-x:hidden;
+  }
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .grid-overlay{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:60px 60px;
+    -webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+    mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+  }
+  .container{position:relative;z-index:2}
+  .container{max-width:840px;margin:0 auto}
+  a.back{
+    display:inline-block;
+    color:var(--orange-2);
+    text-decoration:none;
+    font-size:0.85rem;
+    margin-bottom:1.5rem;
+  }
+  a.back:hover{text-decoration:underline}
+  .tag{
+    display:inline-block;
+    padding:0.35rem 0.85rem;
+    border:1px solid var(--orange);
+    border-radius:3px;
+    color:var(--orange-2);
+    font-family:'Share Tech Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    margin-right:0.5rem;
+    margin-bottom:1rem;
+    background:rgba(255,122,24,0.08);
+    box-shadow:0 0 14px var(--glow);
+  }
+  .tag::before{content:'⚡ ';}
+  h1{
+    font-family:'Orbitron',sans-serif;
+    font-size:clamp(1.7rem,4vw,2.6rem);
+    font-weight:800;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    margin:0.5rem 0 0.25rem;
+    background:linear-gradient(135deg,#fff 0%,var(--orange-2) 55%,var(--orange) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 40px rgba(255,122,24,0.25);
+  }
+  .ps-id{
+    color:var(--orange-2);
+    font-family:'Share Tech Mono',monospace;
+    letter-spacing:0.15em;
+    font-size:0.8rem;
+    margin-bottom:1.5rem;
+    display:flex;align-items:center;gap:0.5rem;
+  }
+  .ps-id::before{
+    content:'';
+    width:8px;height:8px;border-radius:50%;
+    background:var(--orange);
+    box-shadow:0 0 10px var(--glow);
+    display:inline-block;
+    animation:pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.3}}
+  h2{
+    color:var(--orange-2);
+    font-family:'Orbitron',sans-serif;
+    font-size:1.05rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin:2rem 0 0.75rem;
+    padding-bottom:0.4rem;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:0.6rem;
+  }
+  h2::before{
+    content:'';
+    width:10px;height:10px;
+    background:var(--orange);
+    transform:rotate(45deg);
+    box-shadow:0 0 10px var(--glow);
+    flex-shrink:0;
+  }
+  p{color:var(--text-dim);margin-bottom:0.75rem}
+  ul{color:var(--text-dim);margin:0.5rem 0 0.5rem 1.2rem}
+  li{margin-bottom:0.4rem}
+  .card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:1.25rem 1.5rem;
+    margin-bottom:1rem;
+    backdrop-filter:blur(6px);
+    transition:border-color 0.25s, box-shadow 0.25s;
+  }
+  .card:hover{
+    border-color:var(--orange);
+    box-shadow:0 0 30px rgba(255,122,24,0.12);
+  }
+  .card::before, .card::after{
+    content:'';
+    position:absolute;
+    width:14px;height:14px;
+    border:1.5px solid var(--orange);
+  }
+  .card::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .card::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+  table{width:100%;border-collapse:collapse;margin-top:0.5rem}
+  th,td{
+    text-align:left;
+    padding:0.6rem 0.5rem;
+    border-bottom:1px solid var(--border);
+    font-size:0.88rem;
+    color:var(--text-dim);
+  }
+  th{color:var(--orange-2);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em}
+  a.dataset-link{color:var(--cyan)}
+  .skills{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem}
+  .skill-chip{
+    font-family:'Share Tech Mono',monospace;
+    font-size:0.75rem;
+    padding:0.3rem 0.7rem;
+    background:rgba(54,226,255,0.08);
+    border:1px solid rgba(54,226,255,0.25);
+    border-radius:3px;
+    color:var(--cyan);
+    transition:box-shadow 0.2s;
+  }
+  .skill-chip:hover{box-shadow:0 0 12px rgba(54,226,255,0.4)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="grid-overlay"></div>
+<div class="container">
+
+  <a class="back" href="index.html#problems">&larr; Back to all problem statements</a>
+
+  <span class="tag">Satellite Based Land Use Classification</span>
+  <h1>AgriPulse: Satellite Based Land Use Classification</h1>
+  <div class="ps-id">PS-02 &middot; Track 2</div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Core Question</h2>
+    <p>How can satellite imagery be used to automatically understand how land is being used across different regions?</p>
+  </div>
+
+  <h2>The Problem</h2>
+  <p>Governments, environmental planners, and researchers need an up-to-date understanding of how land is being used across different regions.</p>
+  <p>Manually analyzing large amounts of satellite imagery is difficult and time-consuming. Satellite-based land-use classification can help identify and map different types of land automatically.</p>
+
+  <h2>What You Need to Build</h2>
+  <p>AgriPulse is a satellite-image classification system built using Sentinel-2 imagery that should:</p>
+  <ul>
+    <li>Classify satellite images into different land-use/land-cover categories</li>
+    <li>Visualize and map the classified land-use patterns</li>
+    <li>Provide insights or summaries based on the classification results</li>
+  </ul>
+
+  <h2>Bonus Features (Optional)</h2>
+  <ul>
+    <li>Interactive map/dashboard</li>
+    <li>Confidence score for predictions</li>
+    <li>Comparison of land-use patterns across regions</li>
+    <li>Change detection using additional satellite imagery</li>
+  </ul>
+
+  <h2>Dataset</h2>
+  <div class="card">
+    <table>
+      <tr><th>Source</th><th>What it is</th><th>Notes</th></tr>
+      <tr>
+        <td>EuroSAT (RGB) &mdash; Kaggle</td>
+        <td>Sentinel-2 derived RGB imagery labelled by land-use/land-cover class</td>
+        <td>Good starting point for classification; teams may need to supplement with additional imagery for the encroachment-detection element.</td>
+      </tr>
+    </table>
+  </div>
+  <p>
+    Dataset link —
+    <a class="dataset-link" href="https://www.kaggle.com/datasets/waseemalastal/eurosat-rgb-dataset" target="_blank">
+      EuroSAT RGB Dataset
+    </a>
+  </p>
+  <h2>Skills Needed</h2>
+  <div class="skills">
+    <span class="skill-chip">Geospatial ML</span>
+    <span class="skill-chip">Image & scene classification</span>
+    <span class="skill-chip">Remote sensing</span>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = Array.from({length:140}, () => ({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*1.2+0.3,
+      tw: Math.random()*Math.PI*2,
+      speed: Math.random()*0.02+0.01
+    }));
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const s of stars){
+      s.tw += s.speed;
+      const a = (Math.sin(s.tw)+1)/2;
+      ctx.fillStyle = `rgba(230,230,255,${0.3+a*0.7})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  document.querySelectorAll('.card, h2').forEach((el,i) => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    setTimeout(() => {
+      el.style.opacity = 1;
+      el.style.transform = 'translateY(0)';
+    }, 100 + i*80);
+  });
+</script>
+</body>
+</html>

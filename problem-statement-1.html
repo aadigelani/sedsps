@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PS-01 | Space Debris & Collision Warning | Orbital Guard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#05060a;
+    --panel:#0e1221;
+    --border:rgba(255,122,24,0.25);
+    --orange:#ff7a18;
+    --orange-2:#ffa14a;
+    --cyan:#36e2ff;
+    --text:#e7ecf3;
+    --text-dim:#8a93a6;
+    --glow:rgba(255,122,24,0.5);
+    --grid:rgba(255,122,24,0.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(255,122,24,0.08), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(54,226,255,0.05), transparent 50%),
+      linear-gradient(180deg, #05060a 0%, #08091a 50%, #05060a 100%);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    line-height:1.6;
+    padding:2rem 1rem 4rem;
+    position:relative;
+    overflow-x:hidden;
+  }
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .grid-overlay{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:60px 60px;
+    -webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+    mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+  }
+  .container{position:relative;z-index:2}
+  .container{max-width:840px;margin:0 auto}
+  a.back{
+    display:inline-block;
+    color:var(--orange-2);
+    text-decoration:none;
+    font-size:0.85rem;
+    margin-bottom:1.5rem;
+  }
+  a.back:hover{text-decoration:underline}
+  .tag{
+    display:inline-block;
+    padding:0.35rem 0.85rem;
+    border:1px solid var(--orange);
+    border-radius:3px;
+    color:var(--orange-2);
+    font-family:'Share Tech Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    margin-right:0.5rem;
+    margin-bottom:1rem;
+    background:rgba(255,122,24,0.08);
+    box-shadow:0 0 14px var(--glow);
+  }
+  .tag::before{content:'⚡ ';}
+  h1{
+    font-family:'Orbitron',sans-serif;
+    font-size:clamp(1.7rem,4vw,2.6rem);
+    font-weight:800;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    margin:0.5rem 0 0.25rem;
+    background:linear-gradient(135deg,#fff 0%,var(--orange-2) 55%,var(--orange) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 40px rgba(255,122,24,0.25);
+  }
+  .ps-id{
+    color:var(--orange-2);
+    font-family:'Share Tech Mono',monospace;
+    letter-spacing:0.15em;
+    font-size:0.8rem;
+    margin-bottom:1.5rem;
+    display:flex;align-items:center;gap:0.5rem;
+  }
+  .ps-id::before{
+    content:'';
+    width:8px;height:8px;border-radius:50%;
+    background:var(--orange);
+    box-shadow:0 0 10px var(--glow);
+    display:inline-block;
+    animation:pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.3}}
+  h2{
+    color:var(--orange-2);
+    font-family:'Orbitron',sans-serif;
+    font-size:1.05rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin:2rem 0 0.75rem;
+    padding-bottom:0.4rem;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:0.6rem;
+  }
+  h2::before{
+    content:'';
+    width:10px;height:10px;
+    background:var(--orange);
+    transform:rotate(45deg);
+    box-shadow:0 0 10px var(--glow);
+    flex-shrink:0;
+  }
+  p{color:var(--text-dim);margin-bottom:0.75rem}
+  ul{color:var(--text-dim);margin:0.5rem 0 0.5rem 1.2rem}
+  li{margin-bottom:0.4rem}
+  .card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:1.25rem 1.5rem;
+    margin-bottom:1rem;
+    backdrop-filter:blur(6px);
+    transition:border-color 0.25s, box-shadow 0.25s;
+  }
+  .card:hover{
+    border-color:var(--orange);
+    box-shadow:0 0 30px rgba(255,122,24,0.12);
+  }
+  .card::before, .card::after{
+    content:'';
+    position:absolute;
+    width:14px;height:14px;
+    border:1.5px solid var(--orange);
+  }
+  .card::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .card::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+  table{width:100%;border-collapse:collapse;margin-top:0.5rem}
+  th,td{
+    text-align:left;
+    padding:0.6rem 0.5rem;
+    border-bottom:1px solid var(--border);
+    font-size:0.88rem;
+    color:var(--text-dim);
+  }
+  th{color:var(--orange-2);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em}
+  a.dataset-link{color:var(--cyan)}
+  .skills{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem}
+  .skill-chip{
+    font-family:'Share Tech Mono',monospace;
+    font-size:0.75rem;
+    padding:0.3rem 0.7rem;
+    background:rgba(54,226,255,0.08);
+    border:1px solid rgba(54,226,255,0.25);
+    border-radius:3px;
+    color:var(--cyan);
+    transition:box-shadow 0.2s;
+  }
+  .skill-chip:hover{box-shadow:0 0 12px rgba(54,226,255,0.4)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="grid-overlay"></div>
+<div class="container">
+
+  <a class="back" href="index.html#problems">&larr; Back to all problem statements</a>
+
+  <span class="tag">Space Debris & Collision Warning</span>
+  <h1>OrbitalGuard: Collision Risk Prioritization</h1>
+  <div class="ps-id">PS-01 &middot; Track 1</div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Core Question</h2>
+    <p>Among thousands of uncertain collision warnings, which threats actually matter, when should an operator act, and could that action create a new risk?</p>
+  </div>
+
+  <h2>The Problem</h2>
+  <p>Low Earth Orbit is getting crowded with active satellites, dead spacecraft, rocket bodies, and debris fragments sharing the same orbital paths. Satellites constantly receive collision warnings, but these warnings are uncertain and change as new tracking data comes in.</p>
+  <p>Operators are stuck between two bad outcomes: overreacting (burning limited fuel, interrupting the mission, shortening satellite life) or underreacting (risking a catastrophic collision). Dodging one collision can even put a satellite on a path toward a different one.</p>
+  <p>Teams need to turn messy, evolving orbital data into a clear, trustworthy signal for "what to do next."</p>
+
+  <h2>What You Need to Build</h2>
+  <p>A system that analyzes satellite conjunction/collision warning data and helps operators make better decisions about potential collision risks. It should:</p>
+  <ul>
+    <li>Analyze and prioritize potential collision warnings</li>
+    <li>Identify which conjunction events require immediate attention</li>
+    <li>Assign or estimate a risk/confidence level for each event</li>
+    <li>Present results clearly through a dashboard or visualization</li>
+  </ul>
+
+  <h2>Bonus Features (Optional)</h2>
+  <ul>
+    <li>Temporal risk forecasting</li>
+    <li>Uncertainty estimation</li>
+    <li>Explainable risk scoring</li>
+    <li>Manoeuvre planning</li>
+    <li>Multi-object / cascading conjunction analysis</li>
+    <li>Decision-support simulations</li>
+  </ul>
+
+  <h2>Why It Matters</h2>
+  <ul>
+    <li>ISRO performed 20 Collision Avoidance Manoeuvres in 2025 and 9 more by August 2026 &mdash; this is a routine, ongoing operational burden, not a hypothetical.</li>
+    <li>A single rocket-body fragmentation in June 2026 generated 1,436 collision-risk alerts that month for UK-licensed satellites alone, pushing the tracked object catalogue past 34,751 objects. Risk assessments must update continuously, not be treated as a one-time prediction.</li>
+  </ul>
+
+  <h2>Dataset</h2>
+  <div class="card">
+    <table>
+      <tr><th>Source</th><th>What it is</th><th>Notes</th></tr>
+      <tr>
+        <td>ESA Kelvins &mdash; Collision Avoidance Challenge (primary)</td>
+        <td>Anonymised historical Conjunction Data Messages (CDMs), 2015&ndash;2019, ~103 features per CDM</td>
+        <td>Best fit for this challenge. A curated subset (25&ndash;40 features, selected events) may be provided.</td>
+      </tr>
+      <tr>
+        <td>Zenodo archive</td>
+        <td>Permanent mirror of the same dataset (221.1 MB)</td>
+        <td>Use if primary source is unavailable on event day</td>
+      </tr>
+      <tr>
+        <td>Space-Track.org</td>
+        <td>Authoritative orbital catalogue</td>
+        <td>Account required &mdash; supplementary/enrichment only</td>
+      </tr>
+      <tr>
+        <td>N2YO</td>
+        <td>Live satellite tracking reference</td>
+        <td>Good for a live demo element, not a bulk data source</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>Skills Needed</h2>
+  <div class="skills">
+    <span class="skill-chip">Time-series forecasting</span>
+    <span class="skill-chip">Uncertainty / risk modeling</span>
+    <span class="skill-chip">Decision support & optimization</span>
+  </div>
+
+</div>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = Array.from({length:140}, () => ({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*1.2+0.3,
+      tw: Math.random()*Math.PI*2,
+      speed: Math.random()*0.02+0.01
+    }));
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const s of stars){
+      s.tw += s.speed;
+      const a = (Math.sin(s.tw)+1)/2;
+      ctx.fillStyle = `rgba(230,230,255,${0.3+a*0.7})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  document.querySelectorAll('.card, h2').forEach((el,i) => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    setTimeout(() => {
+      el.style.opacity = 1;
+      el.style.transform = 'translateY(0)';
+    }, 100 + i*80);
+  });
+</script>
+</body>
+</html>
