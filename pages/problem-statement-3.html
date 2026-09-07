@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS-03 | Satellite Health: Telemetry Anomaly Detection</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/problem-statement.css" />
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="grid-overlay"></div>
+<div class="container">
+
+  <a class="back" href="../index.html#problems">&larr; Back to all problem statements</a>
+
+  <span class="tag">Satellite Health & Telemetry Anomaly Detection</span>
+  <h1>Mission Critical: Satellite Health Under Watch</h1>
+  <div class="ps-id">PS-03 &middot; Track 3</div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Core Question</h2>
+    <p>Among thousands of satellite telemetry readings, which unusual patterns indicate a potential failure and how severe is the risk?</p>
+  </div>
+
+  <h2>The Problem</h2>
+  <p>A satellite constantly generates telemetry data across systems such as power, thermal control, orientation, and communications.</p>
+  <p>Among thousands of readings, some unusual patterns may be early warning signs of potential failures.</p>
+  
+  <h2>What You Need to Build</h2>
+  <p>An AI powered system that analyzes spacecraft telemetry data to:</p>
+  <ul>
+    <li>Detect unusual patterns and anomalies in telemetry data</li>
+    <li>Highlight and visualize potential anomalies clearly</li>
+    <li>Assess or assign a risk/severity level to detected anomalies</li>
+    <li>Display overall satellite/system health through an interactive dashboard</li>
+  </ul>
+
+  <h2>Bonus Features (Optional)</h2>
+  <ul>
+    <li>Identify the likely affected subsystem</li>
+    <li>Suggest possible corrective actions</li>
+    <li>Provide explanations for why an anomaly was flagged</li>
+    <li>Real-time/streaming telemetry simulation</li>
+  </ul>
+
+  <h2>Dataset</h2>
+  <div class="card">
+    <table>
+      <tr><th>Source</th><th>What it is</th><th>Notes</th></tr>
+      <tr>
+        <td>NASA SMAP/MSL Anomaly Detection Dataset &mdash; Kaggle</td>
+        <td>Real spacecraft telemetry from Soil Moisture Active Passive and Mars Science Laboratory missions with labelled anomalies</td>
+        <td>Well-established benchmark for telemetry anomaly detection with good documentation available.</td>
+      </tr>
+    </table>
+  </div>
+  <p>
+    Dataset link —
+    <a class="dataset-link" href="https://www.kaggle.com/datasets/patrickfleith/nasa-anomaly-detection-dataset-smap-msl" target="_blank" rel="noopener noreferrer">
+      NASA SMAP/MSL Anomaly Detection Dataset
+    </a>
+  </p>
+  <h2>Skills Needed</h2>
+  <div class="skills">
+    <span class="skill-chip">Anomaly detection</span>
+    <span class="skill-chip">Time-series ML</span>
+    <span class="skill-chip">Dashboarding & visualization</span>
+  </div>
+</div>
+
+<script src="../assets/js/problem-statement.js"></script>
+</body>
+</html>

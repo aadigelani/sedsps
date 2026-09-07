@@ -1,0 +1,8 @@
+{
+  "name": "Orbital Guard",
+  "description": "Orbital Guard space-tech hackathon website for SEDS AURORA × VTAPP 2026",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
