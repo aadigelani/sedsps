@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS-01 | Space Debris & Collision Warning | Orbital Guard</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/problem-statement.css" />
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="grid-overlay"></div>
+<div class="container">
+
+  <a class="back" href="../index.html#problems">&larr; Back to all problem statements</a>
+
+  <span class="tag">Space Debris & Collision Warning</span>
+  <h1>OrbitalGuard: Collision Risk Prioritization</h1>
+  <div class="ps-id">PS-01 &middot; Track 1</div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Core Question</h2>
+    <p>Among thousands of uncertain collision warnings, which threats actually matter, when should an operator act, and could that action create a new risk?</p>
+  </div>
+
+  <h2>The Problem</h2>
+  <p>Low Earth Orbit is getting crowded with active satellites, dead spacecraft, rocket bodies, and debris fragments sharing the same orbital paths. Satellites constantly receive collision warnings, but these warnings are uncertain and change as new tracking data comes in.</p>
+  <p>Operators are stuck between two bad outcomes: overreacting (burning limited fuel, interrupting the mission, shortening satellite life) or underreacting (risking a catastrophic collision). Dodging one collision can even put a satellite on a path toward a different one.</p>
+  <p>Teams need to turn messy, evolving orbital data into a clear, trustworthy signal for "what to do next."</p>
+
+  <h2>What You Need to Build</h2>
+  <p>A system that analyzes satellite conjunction/collision warning data and helps operators make better decisions about potential collision risks. It should:</p>
+  <ul>
+    <li>Analyze and prioritize potential collision warnings</li>
+    <li>Identify which conjunction events require immediate attention</li>
+    <li>Assign or estimate a risk/confidence level for each event</li>
+    <li>Present results clearly through a dashboard or visualization</li>
+  </ul>
+
+  <h2>Bonus Features (Optional)</h2>
+  <ul>
+    <li>Temporal risk forecasting</li>
+    <li>Uncertainty estimation</li>
+    <li>Explainable risk scoring</li>
+    <li>Manoeuvre planning</li>
+    <li>Multi-object / cascading conjunction analysis</li>
+    <li>Decision-support simulations</li>
+  </ul>
+
+  <h2>Why It Matters</h2>
+  <ul>
+    <li>ISRO performed 20 Collision Avoidance Manoeuvres in 2025 and 9 more by August 2026 &mdash; this is a routine, ongoing operational burden, not a hypothetical.</li>
+    <li>A single rocket-body fragmentation in June 2026 generated 1,436 collision-risk alerts that month for UK-licensed satellites alone, pushing the tracked object catalogue past 34,751 objects. Risk assessments must update continuously, not be treated as a one-time prediction.</li>
+  </ul>
+
+  <h2>Dataset</h2>
+  <div class="card">
+    <table>
+      <tr><th>Source</th><th>What it is</th><th>Notes</th></tr>
+      <tr>
+        <td>ESA Kelvins &mdash; Collision Avoidance Challenge (primary)</td>
+        <td>Anonymised historical Conjunction Data Messages (CDMs), 2015&ndash;2019, ~103 features per CDM</td>
+        <td>Best fit for this challenge. A curated subset (25&ndash;40 features, selected events) may be provided.</td>
+      </tr>
+      <tr>
+        <td>Zenodo archive</td>
+        <td>Permanent mirror of the same dataset (221.1 MB)</td>
+        <td>Use if primary source is unavailable on event day</td>
+      </tr>
+      <tr>
+        <td>Space-Track.org</td>
+        <td>Authoritative orbital catalogue</td>
+        <td>Account required &mdash; supplementary/enrichment only</td>
+      </tr>
+      <tr>
+        <td>N2YO</td>
+        <td>Live satellite tracking reference</td>
+        <td>Good for a live demo element, not a bulk data source</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>Skills Needed</h2>
+  <div class="skills">
+    <span class="skill-chip">Time-series forecasting</span>
+    <span class="skill-chip">Uncertainty / risk modeling</span>
+    <span class="skill-chip">Decision support & optimization</span>
+  </div>
+
+</div>
+
+<script src="../assets/js/problem-statement.js"></script>
+</body>
+</html>
