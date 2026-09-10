@@ -19,8 +19,8 @@ const problemStatements = [
 ];
 
 const datasets = [
-  ['Space Debris & Collision Warning', 'NASA', 'Near-Earth object and orbital data for impact-risk modelling.', '~140 MB', 'https://cneos.jpl.nasa.gov/'],
-  ['Earth Observation & Climate Intelligence', 'ISRO', 'Multispectral imagery and land-use layers over India.', '~2 GB', 'https://bhuvan.nrsc.gov.in/'],
+  ['Space Debris & Collision Warning', 'NASA', 'Near-Earth object and orbital data for impact-risk modelling.', '~140 MB', 'https://ntrs.nasa.gov/citations/20240004027?utm_source=chatgpt.com'],
+  ['Earth Observation & Climate Intelligence', 'ISRO', 'Multispectral imagery and land-use layers over India.', '~100 MB', 'https://www.kaggle.com/datasets/waseemalastal/eurosat-rgb-dataset'],
   ['Telemetry Anomaly Detector', 'ESA', 'Open spacecraft telemetry benchmarks for anomaly detection.', '~80 GB', 'https://www.kaggle.com/datasets/patrickfleith/nasa-anomaly-detection-dataset-smap-msl'],
 ];
 
